@@ -280,19 +280,19 @@ export default {
     disableSmallDec() {
       return (
         this.numericValue - this.incDecValues[0] < this.minValue ||
-        isNaN(this.numericValue)
+        (isNaN(this.numericValue) && this.incDecValues[0] <= this.minValue)
       );
     },
     disableMediumDec() {
       return (
         this.numericValue - this.incDecValues[1] < this.minValue ||
-        isNaN(this.numericValue)
+        (isNaN(this.numericValue) && this.incDecValues[1] <= this.minValue)
       );
     },
     disableLargeDec() {
       return (
         this.numericValue - this.incDecValues[2] < this.minValue ||
-        isNaN(this.numericValue)
+        (isNaN(this.numericValue) && this.incDecValues[2] <= this.minValue)
       );
     },
     disableSmallInc() {
@@ -332,7 +332,9 @@ export default {
   methods: {
     adjustValue(amount) {
       if (this.isValid) {
-        if (!this.initialValueChanged && amount > this.numericValue) {
+        if (this.isEmpty) {
+          this.valueAsString = this.formatter(amount);
+        } else if (!this.initialValueChanged && amount > this.numericValue) {
           this.valueAsString = this.formatter(amount);
         } else {
           this.valueAsString = this.formatter(
