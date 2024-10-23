@@ -104,6 +104,21 @@
         <td>minValue: {{ this.minValue }}</td>
         <td>
           <BButton
+            id="min-value-decrease-lg"
+            data-cy="min-value-decrease-lg"
+            variant="outline-primary"
+            size="sm"
+            v-on:click="
+              () => {
+                this.minValue -= 100;
+                this.componentKey++;
+              }
+            "
+            v-bind:disabled="this.minValue - 100 < -1000"
+          >
+            -100
+          </BButton>
+          <BButton
             id="min-value-decrease"
             data-cy="min-value-decrease"
             variant="outline-primary"
@@ -114,7 +129,7 @@
                 this.componentKey++;
               }
             "
-            v-bind:disabled="this.minValue == 0"
+            v-bind:disabled="this.minValue - 10 < -1000"
           >
             -10
           </BButton>
@@ -129,15 +144,45 @@
                 this.componentKey++;
               }
             "
-            v-bind:disabled="this.minValue == this.maxValue"
+            v-bind:disabled="this.minValue + 10 >= this.maxValue"
           >
             +10
+          </BButton>
+          <BButton
+            id="min-value-increase-lg"
+            data-cy="min-value-increase-lg"
+            variant="outline-primary"
+            size="sm"
+            v-on:click="
+              () => {
+                this.minValue += 100;
+                this.componentKey++;
+              }
+            "
+            v-bind:disabled="this.minValue + 100 >= this.maxValue"
+          >
+            +100
           </BButton>
         </td>
       </tr>
       <tr>
         <td>maxValue: {{ this.maxValue }}</td>
         <td>
+          <BButton
+            id="max-value-decrease-lg"
+            data-cy="max-value-decrease-lg"
+            variant="outline-primary"
+            size="sm"
+            v-on:click="
+              () => {
+                this.maxValue -= 100;
+                this.componentKey++;
+              }
+            "
+            v-bind:disabled="this.maxValue - 100 <= this.minValue"
+          >
+            -100
+          </BButton>
           <BButton
             id="max-value-decrease"
             data-cy="max-value-decrease"
@@ -149,7 +194,7 @@
                 this.componentKey++;
               }
             "
-            v-bind:disabled="this.maxValue == this.minValue"
+            v-bind:disabled="this.maxValue - 10 <= this.minValue"
           >
             -10
           </BButton>
@@ -164,9 +209,24 @@
                 this.componentKey++;
               }
             "
-            v-bind:disabled="this.maxValue == 1000"
+            v-bind:disabled="this.maxValue + 10 > 1000"
           >
             +10
+          </BButton>
+          <BButton
+            id="max-value-increase-lg"
+            data-cy="max-value-increase-lg"
+            variant="outline-primary"
+            size="sm"
+            v-on:click="
+              () => {
+                this.maxValue += 100;
+                this.componentKey++;
+              }
+            "
+            v-bind:disabled="this.maxValue + 100 > 1000"
+          >
+            +100
           </BButton>
         </td>
       </tr>
