@@ -242,6 +242,76 @@ describe('Test the NumericInput component behavior', () => {
       });
   });
 
+  it('Input remains within bounds of minValue/maxValue', () => {
+    const readySpy = cy.spy().as('readySpy');
+
+    cy.mount(NumericInput, {
+      props: {
+        label: 'Test',
+        invalidFeedbackText: 'Test feedback text',
+        value: 50,
+        minValue: 0,
+        maxValue: 100,
+        incDecValues: [50, 100],
+        onReady: readySpy,
+      },
+    });
+
+    cy.get('@readySpy')
+      .should('have.been.calledOnce')
+      .then(() => {
+        cy.get('[data-cy="numeric-decrease-md"]').should('be.disabled');
+        cy.get('[data-cy="numeric-decrease-sm"]').should('be.enabled');
+        cy.get('[data-cy="numeric-increase-sm"]').should('be.enabled');
+        cy.get('[data-cy="numeric-increase-md"]').should('be.disabled');
+
+        cy.get('[data-cy="numeric-input"]').clear();
+        cy.get('[data-cy="numeric-input"]').type('101');
+        cy.get('[data-cy="numeric-input"]').blur();
+        cy.get('[data-cy="numeric-input"]').should('have.value', '100');
+
+        cy.get('[data-cy="numeric-input"]').clear();
+        cy.get('[data-cy="numeric-input"]').type('-1');
+        cy.get('[data-cy="numeric-input"]').blur();
+        cy.get('[data-cy="numeric-input"]').should('have.value', '0');
+      });
+  });
+
+  it('Input remains within bounds of negative minValue/maxValue', () => {
+    const readySpy = cy.spy().as('readySpy');
+
+    cy.mount(NumericInput, {
+      props: {
+        label: 'Test',
+        invalidFeedbackText: 'Test feedback text',
+        value: -150,
+        minValue: -200,
+        maxValue: -100,
+        incDecValues: [50, 100],
+        onReady: readySpy,
+      },
+    });
+
+    cy.get('@readySpy')
+      .should('have.been.calledOnce')
+      .then(() => {
+        cy.get('[data-cy="numeric-decrease-md"]').should('be.disabled');
+        cy.get('[data-cy="numeric-decrease-sm"]').should('be.enabled');
+        cy.get('[data-cy="numeric-increase-sm"]').should('be.enabled');
+        cy.get('[data-cy="numeric-increase-md"]').should('be.disabled');
+
+        cy.get('[data-cy="numeric-input"]').clear();
+        cy.get('[data-cy="numeric-input"]').type('-99');
+        cy.get('[data-cy="numeric-input"]').blur();
+        cy.get('[data-cy="numeric-input"]').should('have.value', '-100');
+
+        cy.get('[data-cy="numeric-input"]').clear();
+        cy.get('[data-cy="numeric-input"]').type('-201');
+        cy.get('[data-cy="numeric-input"]').blur();
+        cy.get('[data-cy="numeric-input"]').should('have.value', '-200');
+      });
+  });
+
   it('Blank input, inc/dec button sets value to increment amount', () => {
     const readySpy = cy.spy().as('readySpy');
 
